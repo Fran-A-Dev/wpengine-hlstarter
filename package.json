@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "wpe-build": "next build",
     "start": "next start",
     "lint": "next lint"
+
   },
   "dependencies": {
     "@apollo/client": "^3.3.20",
