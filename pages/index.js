@@ -57,35 +57,44 @@ export default function Home({ page, posts }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getStaticProps({ language }) {
   const apolloClient = getApolloClient();
 
   const data = await apolloClient.query({
     query: gql`
-      {
-        generalSettings {
-          title
-          description
-        }
-        posts(first: 10000) {
+      query posts {
+        posts(where: { language: EN }) {
           edges {
             node {
               id
               excerpt
               title
               slug
+              language {
+                code
+                locale
+              }
             }
           }
         }
+        generalSettings {
+          title
+          description
+        }
       }
     `,
+    variables: {
+      language,
+    },
   });
 
-  const posts = data?.data.posts.edges
+  let posts = data?.data.posts.edges
+
     .map(({ node }) => node)
     .map((post) => {
       return {
         ...post,
+        ...language,
         path: `/posts/${post.slug}`,
       };
     });
